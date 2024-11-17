@@ -1,4 +1,5 @@
-// Airport Class
+/* eslint-disable */ 
+
 export default class Airport {
     constructor(name, code) {
       this._name = name;

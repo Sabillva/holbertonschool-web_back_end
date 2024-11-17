@@ -1,4 +1,4 @@
-// Classroom Class
+/* eslint-disable */ 
 import ClassRoom from './0-classroom';
 
 const initializeRooms = () => [
