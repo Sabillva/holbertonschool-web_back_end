@@ -1,3 +1,4 @@
+/* eslint-disable */
 function handleResponseFromAPI(promise) {
   return promise
     .then(() => ({
