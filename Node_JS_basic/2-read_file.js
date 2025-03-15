@@ -1,44 +1,37 @@
-const fs = require("fs");
+/*eslint-disable*/
+const file = require("fs");
 
-const countStudents = (path) => {
+function countStudents(path) {
   try {
-    // Pull data from CSV file
-    const fileData = fs
-      .readFileSync(path, "utf8")
-      .split("\n")
-      .filter((row) => row !== "")
-      .map((student) => student.split(","))
-      .slice(1)
-      .reduce((total, currentVal) => {
-        const eslint = total;
-        const subj = currentVal[currentVal.length - 1];
-        const firstName = currentVal[0];
+    const lines = file.readFileSync(path, { encoding: "utf8" }).split(/\r?\n/);
+    let countStudents = 0;
+    const fields = {};
 
-        if (typeof eslint[subj] === "undefined") eslint[subj] = [firstName];
-        else eslint[subj].push(firstName);
-
-        return eslint;
-      }, {});
-
-    // Prepare Print Statements
-    let totalStudents = 0;
-    let output = "";
-
-    for (const field in fileData) {
-      if (fileData.hasOwnProperty) {
-        totalStudents += fileData[field].length;
-        output += `Number of students in ${field}: ${
-          fileData[field].length
-        }. List: ${fileData[field].join(", ")}\n`;
+    for (let i = 1; i < lines.length; i += 1) {
+      const line = lines[i].trim();
+      if (line !== "") {
+        countStudents += 1;
+        const [fname, , , field] = line.split(",");
+        if (!fields[field]) {
+          fields[field] = {
+            countField: 1,
+            students: [fname],
+          };
+        } else {
+          fields[field].countField += 1;
+          fields[field].students.push(fname);
+        }
       }
     }
-
-    // Print necessary print statements
-    console.log(`Number of students: ${totalStudents}`);
-    const p = output.split("\n").slice(0, -1);
-    for (const str of p) console.log(str);
-  } catch (e) {
-    throw Error("Cannot load the database");
+    console.log(`Number of students: ${countStudents}`);
+    for (const field of Object.keys(fields)) {
+      const n = fields[field].countField;
+      const names = fields[field].students.join(", ");
+      console.log(`Number of students in ${field}: ${n}. List: ${names}`);
+    }
+  } catch (error) {
+    throw new Error("Cannot load the database");
   }
-};
+}
+
 module.exports = countStudents;

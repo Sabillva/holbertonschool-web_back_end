@@ -1,4 +1,6 @@
-const displayMessage = (str) => {
-  console.log(str);
-};
+/*eslint-disable*/
 module.exports = displayMessage;
+
+function displayMessage(mes) {
+  console.log(mes);
+}

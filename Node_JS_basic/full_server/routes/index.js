@@ -1,15 +1,18 @@
-const app = require("../server");
-const AppController = require("../controllers/AppController");
-const StudentsController = require("../controllers/StudentsController");
-const dbPath = process.argv[2];
-const router = app.Router();
+/*eslint-disable*/
+import AppController from "../controllers/AppController";
+import StudentsController from "../controllers/StudentsController";
 
-console.log("dbPath");
+const express = require("express");
 
-router.get("/", (res, req) => AppController.getHomepage(res, req));
-router.get("/students", (res, req) =>
-  StudentsController.getAllStudents(res, req, dbPath)
-);
-router.get("/students/:major", (res, req) =>
-  StudentsController.getAllStudentsByMajor(res, req, dbPath)
-);
+const router = express.Router();
+
+router.get("/", AppController.getHomepage);
+
+router.get("/students", (req, res) => {
+  StudentsController.getAllStudents(req, res, process.argv[2]);
+});
+router.get("/students/:major", (req, res) => {
+  StudentsController.getAllStudentsByMajor(req, res, process.argv[2]);
+});
+
+export default router;

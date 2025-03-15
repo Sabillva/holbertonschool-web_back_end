@@ -1,19 +1,27 @@
-const app = require("express")();
+/*eslint-disable*/
+const express = require("express");
 const countStudents = require("./3-read_file_async");
-const pathToCSVFile = process.argv[2];
 
-// Setup a listener
-app.listen(1245);
+const database = process.argv[2];
+const port = 1245;
+const app = express();
 
 app.get("/", (req, res) => {
-  res.status(200).send("Hello Holberton School!");
+  res.setHeader("Content-Type", "text/plain");
+  res.send("Hello Holberton School!");
 });
 
 app.get("/students", (req, res) => {
-  countStudents(pathToCSVFile, 0).then((success) => {
-    const out = `This is the list of our students\n${success}`;
-    res.status(200).send(out);
-  });
+  res.setHeader("Content-Type", "text/plain");
+  res.write("This is the list of our students\n");
+  countStudents(database)
+    .then((data) => {
+      res.end(data.join("\n"));
+    })
+    .catch((error) => {
+      res.end(`${error.message}`);
+    });
 });
 
+app.listen(port);
 module.exports = app;

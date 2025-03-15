@@ -1,9 +1,13 @@
-process.stdout.write("Welcome to Holberton School, what is your name?\n");
-process.stdin
-  .on("readable", () => {
-    const input = process.stdin.read();
-    if (input) process.stdout.write(`Your name is: ${input}`);
-  })
-  .on("end", () => {
-    process.stdout.write("This important software is now closing\n");
-  });
+/*eslint-disable*/
+const std = require("process");
+
+std.stdout.write("Welcome to Holberton School, what is your name?\n");
+std.stdin.on("readable", () => {
+  const name = std.stdin.read();
+  if (name) {
+    std.stdout.write(`Your name is: ${name}`);
+  }
+});
+std.stdin.on("end", () => {
+  console.log("This important software is now closing");
+});
